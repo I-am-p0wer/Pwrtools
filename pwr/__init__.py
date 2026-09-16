@@ -19,7 +19,10 @@
 *  pwr.sha1(data)
 *  pwr.sha256(data)
 *  pwr.sha512(data)
-"""
+*  pwr.urle(data, safe="")
+*  pwr.urld(data, decode=False)
+*  pwr.rev(data, hexstr=False) """
+
 from .rotn import rot_n, rot13, rot_brute
 from .xor import xor
 from .xor_brute import xor_brute
@@ -30,11 +33,18 @@ from .b58 import b58e, b58d
 from .b32 import b32e, b32d
 from .b85 import b85e, b85d
 from .hashes import md5, sha1, sha256, sha512
+from .url import urle, urld
+from .rev import rev
 
 __all__ = [
     "rot_n", "rot13", "rot_brute",
-    "xor", "xor_brute", 
-    "from_hex", "to_hex", 
-    "b64e", "b64d", "b58e", "b58d", "b32e", "b32d", "b85e", "b85d",
-    "md5", "sha1", "sha256", "sha512"
+    "xor", "xor_brute",
+    "from_hex", "to_hex",
+    "b64e", "b64d",
+    "b58e", "b58d",
+    "b32e", "b32d",
+    "b85e", "b85d",
+    "md5", "sha1", "sha256", "sha512",
+    "urle", "urld",
+    "rev"
 ]

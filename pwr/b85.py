@@ -2,13 +2,7 @@ import base64
 from typing import Union
 
 def b85e(data: Union[str, bytes], ascii85: bool = False, encoding: str = "utf-8") -> str:
-    """Base85 エンコード処理
-    
-    :param data: エンコード対象 (str または bytes)
-    :param ascii85: True の場合、Ascii85 (Adobe variant) を使用
-    :param encoding: str入力時の文字コード
-    :return: エンコード済み文字列
-    """
+    """Base85 / Ascii85 エンコード処理"""
     if isinstance(data, str):
         data_bytes = data.encode(encoding)
     elif isinstance(data, (bytes, bytearray)):
@@ -28,20 +22,25 @@ def b85d(
     encoding: str = "utf-8", 
     errors: str = "ignore"
 ) -> Union[bytes, str]:
-    """Base85 デコード処理 (デフォルト: bytes)
-    
-    :param data: デコード対象 (str または bytes)
-    :param ascii85: True の場合、Ascii85 (Adobe variant) としてデコード
-    :param decode: True の場合、結果を文字列(str)で返す
-    :param encoding: decode=True 時の文字コード
-    :param errors: デコード失敗時の挙動
-    :return: デコード後の bytes または str
-    """
+    """Base85 / Ascii85 デコード処理 (デリミタ自動除去機能付き)"""
     if isinstance(data, str):
         clean_data = data.strip().replace("\n", "").replace(" ", "")
+        # Ascii85 のデリミタ <~ と ~> を自動除去
+        if clean_data.startswith("<~"):
+            clean_data = clean_data[2:]
+            ascii85 = True
+        if clean_data.endswith("~>"):
+            clean_data = clean_data[:-2]
+            ascii85 = True
         data_bytes = clean_data.encode("ascii")
     elif isinstance(data, (bytes, bytearray)):
         data_bytes = bytes(data)
+        if data_bytes.startswith(b"<~"):
+            data_bytes = data_bytes[2:]
+            ascii85 = True
+        if data_bytes.endswith(b"~>"):
+            data_bytes = data_bytes[:-2]
+            ascii85 = True
     else:
         raise TypeError("Input must be str or bytes")
 
